@@ -10,14 +10,13 @@ const { expect, test } = require('@playwright/test')
 // By default Playwright Test has no timeout for actions (e.g. clicking an element).
 // Learn more here: https://www.checklyhq.com/docs/browser-checks/timeouts/
 test.use({ actionTimeout: 10000 })
-console.log("XOXOXOXOXOXOXO")
 test('visit page and take screenshot', async ({ page }) => {
     // Change checklyhq.com to your site's URL,
     // or, even better, define a ENVIRONMENT_URL environment variable
     // to reuse it across your browser checks
-    const response = await page.goto(process.env.ENVIRONMENT_URL || 'https://checklyhq.com')
+    const response = await page.goto('https://testable-ecommerce.vercel.app/')
 
-    // Test that the response did not fail
+    // Test that the response did not fail 
     expect(response.status()).toBeLessThan(400)
 
     // Take a screenshot
