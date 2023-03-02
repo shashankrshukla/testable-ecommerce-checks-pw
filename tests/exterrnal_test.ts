@@ -1,39 +1,25 @@
-import { test, expect, type Page } from '@playwright/test';
+/**
+  * To learn more about Playwright Test visit:
+  * https://www.checklyhq.com/docs/browser-checks/playwright-test/
+  * https://playwright.dev/docs/writing-tests
+  */
 
-test.beforeEach(async ({ page }) => {
-  await page.goto('https://demo.playwright.dev/todomvc');
-});
+const { expect, test } = require('@playwright/test')
 
-const TODO_ITEMS = [
-  'buy some cheese',
-  'feed the cat',
-  'book a doctors appointment'
-];
+// Set the action timeout to 10 seconds to quickly identify failing actions.
+// By default Playwright Test has no timeout for actions (e.g. clicking an element).
+// Learn more here: https://www.checklyhq.com/docs/browser-checks/timeouts/
+test.use({ actionTimeout: 10000 })
 
-test.describe('Eterrnal Test POn Live Website', () => {
-  test('should allow me to add todo items', async ({ page }) => {
-    // create a new todo locator
-    const newTodo = page.getByPlaceholder('What needs to be done?');
+test('visit page and take screenshot', async ({ page }) => {
+    // Change checklyhq.com to your site's URL,
+    // or, even better, define a ENVIRONMENT_URL environment variable
+    // to reuse it across your browser checks
+    const response = await page.goto(process.env.ENVIRONMENT_URL || 'https://checklyhq.com')
 
-    // Create 1st todo.
-    await newTodo.fill(TODO_ITEMS[0]);
-    await newTodo.press('Enter');
+    // Test that the response did not fail
+    expect(response.status()).toBeLessThan(400)
 
-    // Make sure the list only has one todo item.
-    await expect(page.getByTestId('todo-title')).toHaveText([
-      TODO_ITEMS[0]
-    ]);
-
-    // Create 2nd todo.
-    await newTodo.fill(TODO_ITEMS[1]);
-    await newTodo.press('Enter');
-
-    // Make sure the list now has two todo items.
-    await expect(page.getByTestId('todo-title')).toHaveText([
-      TODO_ITEMS[0],
-      TODO_ITEMS[1]
-    ]);
-  });
-
- 
-});
+    // Take a screenshot
+    await page.screenshot({ path: 'screenshot.jpg' })
+})
